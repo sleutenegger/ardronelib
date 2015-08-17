@@ -190,7 +190,7 @@ define BUILD_OFILE_TEMPLATE
 ifeq ($(USE_IPHONE),yes)
    @sed -ie 's,\(.*\.o\)\([ :]*\),\1 $$@\2,g' $$@
 else
-	@sed -i 's,\(.*\.o\)\([ :]*\),\1 $$@\2,g' $$@	
+	@sed -ie 's,\(.*\.o\)\([ :]*\),\1 $$@\2,g' $$@	
 endif
   $$(GENERIC_$(1)_TARGET_DIR)/%.o: $$(GENERIC_$(1)_TARGET_DIR)/%$(2).d
 	@$$(CREATE_TARGET_DIRECTORY)
