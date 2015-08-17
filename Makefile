@@ -1,6 +1,6 @@
 SDK_PATH:=$(shell pwd)/ARDroneLib
 PC_TARGET=yes
-USE_LINUX=no
+USE_LINUX=yes
 
 
 ifdef MYKONOS
