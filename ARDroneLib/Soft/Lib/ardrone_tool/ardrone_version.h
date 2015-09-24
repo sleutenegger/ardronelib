@@ -21,7 +21,7 @@ extern ardrone_version_t ardroneVersion;
  */
 static inline uint32_t ardroneModelFromVersion (ardrone_version_t *version)
 {
-  if (NULL == version)
+  if (0 == version)
     {
       return 0;
     }

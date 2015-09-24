@@ -14,6 +14,10 @@ ifndef ALL_TARGETS
 export ALL_TARGETS=../../Soft/Build/targets_versions
 endif
 
+ifeq ($(shell uname),Darwin)
+    export OSX=yes
+endif
+
 ifeq ($(MAKECMDGOALS),check)
   export QUIET_BUILD=no
 ##  export MAKEFLAGS+=--no-print-directory
@@ -86,7 +90,11 @@ else
 			TOOLCHAIN_PATH=$(PLATFORM_DEVELOPER_BIN_DIR)
 			GENERIC_COMMAND_PREFIX=$(TOOLCHAIN_PATH)/
 	else
-	     OS_TARGET_ID=$(shell uname -sor | sed -e "s/[ \/]/_/g")
+       ifdef OSX
+	        OS_TARGET_ID=$(shell uname -sr | sed -e "s/[ \/]/_/g")
+       else
+	        OS_TARGET_ID=$(shell uname -sor | sed -e "s/[ \/]/_/g")
+       endif
         ifeq ($(USE_ANDROID),yes)
           TOOLCHAIN_PATH=$(NDK_PATH)/toolchains/$(TOOLCHAIN_VERSION)/prebuilt/linux-x86/bin
           GENERIC_COMMAND_PREFIX=$(TOOLCHAIN_PATH)/arm-linux-androideabi-
@@ -99,7 +107,11 @@ else
     endif
 endif
 
-GCC_VERSION=$(shell $(GENERIC_COMMAND_PREFIX)gcc -v 2>&1 | grep --color=never version | grep -v [cC]onfigur | sed -e "s/\(^version gcc \)\([^ ]*\)\(.*\)/\2/" | sed -e "s/\(^gcc version \)\([^ ]*\)\(.*\)/\2/")
+ifdef OSX
+  GCC_VERSION=osx
+else
+  GCC_VERSION=$(shell $(GENERIC_COMMAND_PREFIX)gcc -v 2>&1 | grep --color=never version | grep -v [cC]onfigur | sed -e "s/\(^version gcc \)\([^ ]*\)\(.*\)/\2/" | sed -e "s/\(^gcc version \)\([^ ]*\)\(.*\)/\2/")
+endif
 
 ifeq ($(USE_NDS),no)
 ifeq ($(USE_MINGW32),no)

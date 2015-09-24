@@ -139,7 +139,12 @@ C_RESULT ffmpeg_stage_decoding_open(ffmpeg_stage_decoding_config_t *cfg)
   cfg->pCodecCtxMP4->pix_fmt = PIX_FMT_YUV420P;
   cfg->pCodecCtxMP4->skip_frame = AVDISCARD_DEFAULT;
   cfg->pCodecCtxMP4->error_concealment = FF_EC_GUESS_MVS | FF_EC_DEBLOCK;
+// required to build with newer avcodec installed with brew ffmpeg on osx
+#ifdef FF_ER_CAREFUL
   cfg->pCodecCtxMP4->error_recognition = FF_ER_CAREFUL;
+#else
+  cfg->pCodecCtxMP4->err_recognition = 1;
+#endif
   cfg->pCodecCtxMP4->skip_loop_filter = AVDISCARD_DEFAULT;
   cfg->pCodecCtxMP4->workaround_bugs = FF_BUG_AUTODETECT;
   cfg->pCodecCtxMP4->codec_type = AVMEDIA_TYPE_VIDEO;
@@ -149,7 +154,12 @@ C_RESULT ffmpeg_stage_decoding_open(ffmpeg_stage_decoding_config_t *cfg)
   cfg->pCodecCtxH264->pix_fmt = PIX_FMT_YUV420P;
   cfg->pCodecCtxH264->skip_frame = AVDISCARD_DEFAULT;
   cfg->pCodecCtxH264->error_concealment = FF_EC_GUESS_MVS | FF_EC_DEBLOCK;
+// required to build with newer avcodec installed with brew ffmpeg on osx
+#ifdef FF_ER_CAREFUL
   cfg->pCodecCtxH264->error_recognition = FF_ER_CAREFUL;
+#else
+  cfg->pCodecCtxH264->err_recognition = 1;
+#endif
   cfg->pCodecCtxH264->skip_loop_filter = AVDISCARD_DEFAULT;
   cfg->pCodecCtxH264->workaround_bugs = FF_BUG_AUTODETECT;
   cfg->pCodecCtxH264->codec_type = AVMEDIA_TYPE_VIDEO;
