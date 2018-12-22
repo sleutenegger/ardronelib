@@ -164,12 +164,13 @@ C_RESULT video_stage_decoder_transform (video_decoder_config_t *cfg, vp_api_io_d
     startTime = mach_absolute_time ();
 #endif
 
-
+		uint32_t timestamp = 0; // sleutenegger: remember timestamp
 
     // Check for PaVE
     if (havePaVE (buffer))
     {
         parrot_video_encapsulation_t *PaVE = (parrot_video_encapsulation_t *)buffer;
+        timestamp = PaVE->timestamp; // sleutenegger: remember timestamp
 
         video_stage_decoder_lastDetectedCodec = PaVE->video_codec;
 
@@ -263,6 +264,10 @@ C_RESULT video_stage_decoder_transform (video_decoder_config_t *cfg, vp_api_io_d
         out->numBuffers = outToCopy->numBuffers;
         out->buffers = outToCopy->buffers;
         out->indexBuffer = outToCopy->indexBuffer;
+        memcpy(outToCopy->buffers[outToCopy->indexBuffer],&timestamp,4); // sleutenegger hack: write timestamp into image
+        if(timestamp == 0) {
+            printf(" -- Critical error : timestamp not parsed"); // TODO sleutenegger: handle case of no PaVE
+        }
         out->size = outToCopy->size;
         out->lineSize = outToCopy->lineSize;
         out->status = outToCopy->status;
